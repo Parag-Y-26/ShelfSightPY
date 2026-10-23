@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- Atta Noodles Green & Yellow Packet -->
+    <path
+        android:fillColor="#2D6A4F"
+        android:pathData="M16,14 L80,14 C84,14 86,16 86,20 L82,82 C82,86 80,88 76,88 L20,88 C16,88 14,86 14,82 L10,20 C10,16 12,14 16,14 Z" />
+    <path
+        android:fillColor="#FFD100"
+        android:pathData="M24,20 L72,20 C76,20 78,22 76,26 L72,40 C70,44 66,46 62,46 L34,46 C30,46 26,44 24,40 L20,26 C18,22 20,20 24,20 Z" />
+    <path
+        android:fillColor="#E51837"
+        android:pathData="M28,26 L68,26 L68,34 L28,34 Z" />
+    <path
+        android:fillColor="#D8F3DC"
+        android:pathData="M22,50 L74,50 L72,78 L24,78 Z" />
+    <!-- Wheat ears illustration -->
+    <path
+        android:strokeColor="#52B788"
+        android:strokeWidth="2"
+        android:pathData="M34,68 Q48,56 62,68" />
+</vector>

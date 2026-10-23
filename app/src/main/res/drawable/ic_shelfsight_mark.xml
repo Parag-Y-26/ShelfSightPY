@@ -1,0 +1,66 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Viewfinder Brackets -->
+    <path
+        android:strokeColor="#00B4D8"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M16,36 L16,20 A4,4 0 0,1 20,16 L36,16" />
+    <path
+        android:strokeColor="#0077B6"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M84,16 L100,16 A4,4 0 0,1 104,20 L104,36" />
+    <path
+        android:strokeColor="#00B4D8"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M16,84 L16,100 A4,4 0 0,0 20,104 L36,104" />
+    <path
+        android:strokeColor="#0077B6"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M84,104 L100,104 A4,4 0 0,0 104,100 L104,84" />
+
+    <!-- Left Shelf Triangle/Badge -->
+    <path
+        android:fillColor="#80E0EF"
+        android:pathData="M24,24 L48,32 L48,72 L24,64 Z" />
+    <path
+        android:fillColor="#0077B6"
+        android:pathData="M28,32 L44,37 L44,40 L28,35 Z" />
+    <path
+        android:fillColor="#0077B6"
+        android:pathData="M28,45 L44,50 L44,53 L28,48 Z" />
+
+    <!-- Right Bar Chart -->
+    <path
+        android:fillColor="#00B4D8"
+        android:pathData="M72,66 L78,66 L78,82 L72,82 Z" />
+    <path
+        android:fillColor="#0096C7"
+        android:pathData="M82,54 L88,54 L88,82 L82,82 Z" />
+    <path
+        android:fillColor="#0077B6"
+        android:pathData="M92,42 L98,42 L98,82 L92,82 Z" />
+
+    <!-- Center Camera Lens Outer Ring -->
+    <path
+        android:fillColor="#023E8A"
+        android:pathData="M60,60 m-26,0 a26,26 0 1,0 52,0 a26,26 0 1,0 -52,0" />
+    <!-- Gradient Lens Inner Ring -->
+    <path
+        android:fillColor="#00B4D8"
+        android:pathData="M60,60 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0" />
+    <!-- Deep Pupil -->
+    <path
+        android:fillColor="#03045E"
+        android:pathData="M60,60 m-13,0 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0" />
+    <!-- Lens Reflection Spot -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M65,54 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+</vector>

@@ -1,0 +1,6 @@
+{
+  "name": "ShelfSight",
+  "description": "Retail shelf analytics, camera monitoring, interactive store map, and inventory intelligence platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

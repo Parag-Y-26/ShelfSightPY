@@ -1,0 +1,156 @@
+{
+  "entities": {
+    "Store": {
+      "title": "Store",
+      "description": "Retail store configuration and metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique store document ID" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "name": { "type": "string", "description": "Name of retail store" },
+        "storeType": { "type": "string", "description": "Store category e.g. Grocery" },
+        "totalShelves": { "type": "integer", "description": "Total shelf count" },
+        "selectedFloorId": { "type": "string", "description": "Currently active floor ID" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp via FieldValue.serverTimestamp()" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp via FieldValue.serverTimestamp()" }
+      },
+      "required": ["id", "userId", "name", "storeType", "totalShelves", "createdAt", "updatedAt"]
+    },
+    "Shelf": {
+      "title": "Shelf",
+      "description": "Retail shelf unit on the store floor",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique shelf ID" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "storeId": { "type": "string", "description": "Parent store ID" },
+        "floorId": { "type": "string", "description": "Floor identifier" },
+        "shelfNumber": { "type": "integer", "description": "Sequential shelf number" },
+        "name": { "type": "string", "description": "Shelf display name" },
+        "category": { "type": "string", "description": "Shelf product category" },
+        "shape": { "type": "string", "description": "Shelf shape (RECTANGLE or SQUARE)" },
+        "widthMeters": { "type": "number", "description": "Width in meters" },
+        "lengthMeters": { "type": "number", "description": "Length in meters" },
+        "positionX": { "type": "number", "description": "X coordinate in meters" },
+        "positionY": { "type": "number", "description": "Y coordinate in meters" },
+        "rotationDegrees": { "type": "number", "description": "Orientation angle" },
+        "rowCount": { "type": "integer", "description": "Number of shelf tiers/rows" },
+        "slotsPerRow": { "type": "integer", "description": "Slots per tier" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["id", "userId", "shelfNumber", "name", "category", "shape", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Item in retail master catalog",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique product ID" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "barcode": { "type": "string", "description": "EAN / UPC barcode" },
+        "name": { "type": "string", "description": "Product display name" },
+        "brand": { "type": "string", "description": "Brand or manufacturer" },
+        "category": { "type": "string", "description": "Product category" },
+        "netWeight": { "type": "string", "description": "Package weight" },
+        "mrp": { "type": "string", "description": "Price label" },
+        "isVeg": { "type": "boolean", "description": "Vegetarian indicator" },
+        "isFssaiVerified": { "type": "boolean", "description": "Food safety verification" },
+        "energyKcal": { "type": "integer", "description": "Calories in Kcal" },
+        "proteinG": { "type": "number", "description": "Protein in grams" },
+        "carbsG": { "type": "number", "description": "Carbohydrates in grams" },
+        "fatG": { "type": "number", "description": "Fat in grams" },
+        "sodiumMg": { "type": "integer", "description": "Sodium in mg" },
+        "ingredients": { "type": "string", "description": "Ingredient text list" },
+        "manufacturer": { "type": "string", "description": "Manufacturer name" },
+        "shelfLife": { "type": "string", "description": "Expiry or shelf life" },
+        "iconResName": { "type": "string", "description": "Icon asset reference" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["id", "userId", "barcode", "name", "brand", "category", "createdAt", "updatedAt"]
+    },
+    "ShelfItem": {
+      "title": "ShelfItem",
+      "description": "Stock count and placement of a product on a shelf",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique item ID" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "shelfId": { "type": "string", "description": "Target shelf ID" },
+        "productId": { "type": "string", "description": "Target product ID" },
+        "rowNumber": { "type": "integer", "description": "Shelf tier 1..2" },
+        "slotNumber": { "type": "integer", "description": "Slot on tier 1..3" },
+        "quantity": { "type": "integer", "description": "Current on-shelf stock count" },
+        "confidence": { "type": "number", "description": "Detection confidence" },
+        "lowStockThreshold": { "type": "integer", "description": "Threshold for low stock alert" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["id", "userId", "shelfId", "productId", "rowNumber", "slotNumber", "quantity", "createdAt", "updatedAt"]
+    },
+    "CameraCalibration": {
+      "title": "CameraCalibration",
+      "description": "Monitoring zone coordinates and dwell limits for a shelf camera",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique calibration ID or shelfId" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "shelfId": { "type": "string", "description": "Calibrated shelf ID" },
+        "zoneLeft": { "type": "number", "description": "Normalized left boundary 0..1" },
+        "zoneTop": { "type": "number", "description": "Normalized top boundary 0..1" },
+        "zoneRight": { "type": "number", "description": "Normalized right boundary 0..1" },
+        "zoneBottom": { "type": "number", "description": "Normalized bottom boundary 0..1" },
+        "dwellCutoffSeconds": { "type": "number", "description": "Minimum seconds to qualify visit" },
+        "exitGraceSeconds": { "type": "number", "description": "Seconds allowed before closing track" },
+        "isCalibrated": { "type": "boolean", "description": "Whether camera is calibrated" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["id", "userId", "shelfId", "zoneLeft", "zoneTop", "zoneRight", "zoneBottom", "createdAt", "updatedAt"]
+    },
+    "ObservationEvent": {
+      "title": "ObservationEvent",
+      "description": "Append-only telemetry log for shopper visits and stock corrections",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique event ID" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "shelfId": { "type": "string", "description": "Target shelf ID" },
+        "shelfNumber": { "type": "integer", "description": "Shelf number" },
+        "trackId": { "type": "integer", "description": "Computer vision tracking ID" },
+        "eventType": { "type": "string", "description": "Event type e.g. DWELL_QUALIFIED" },
+        "dwellSeconds": { "type": "number", "description": "Total dwell duration" },
+        "details": { "type": "string", "description": "Additional event context" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Event timestamp" }
+      },
+      "required": ["id", "userId", "shelfId", "shelfNumber", "eventType", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/stores/{storeId}": {
+      "schema": "Store",
+      "description": "Retail store details for an authenticated merchant"
+    },
+    "/users/{userId}/shelves/{shelfId}": {
+      "schema": "Shelf",
+      "description": "Floor map shelves and dimensions"
+    },
+    "/users/{userId}/products/{productId}": {
+      "schema": "Product",
+      "description": "Product catalog and nutritional details"
+    },
+    "/users/{userId}/shelf_items/{itemId}": {
+      "schema": "ShelfItem",
+      "description": "Shelf stock inventory tracking"
+    },
+    "/users/{userId}/camera_calibrations/{shelfId}": {
+      "schema": "CameraCalibration",
+      "description": "Camera monitoring zones and dwell settings"
+    },
+    "/users/{userId}/observation_events/{eventId}": {
+      "schema": "ObservationEvent",
+      "description": "Append-only visitor visits, dwell times, and stock corrections"
+    }
+  }
+}

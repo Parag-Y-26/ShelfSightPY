@@ -1,0 +1,237 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Helper: Store validation
+    function isValidStore(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             data.storeType is string && data.storeType.size() >= 1 && data.storeType.size() <= 50 &&
+             data.totalShelves is int && data.totalShelves >= 1 && data.totalShelves <= 100 &&
+             (!('selectedFloorId' in data) || (data.selectedFloorId is string && data.selectedFloorId.size() <= 128));
+    }
+
+    // Helper: Shelf validation
+    function isValidShelf(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.shelfNumber is int && data.shelfNumber >= 1 && data.shelfNumber <= 500 &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             data.category is string && data.category.size() >= 1 && data.category.size() <= 100 &&
+             data.shape is string && (data.shape == 'RECTANGLE' || data.shape == 'SQUARE') &&
+             (!('storeId' in data) || (data.storeId is string && data.storeId.size() <= 128)) &&
+             (!('floorId' in data) || (data.floorId is string && data.floorId.size() <= 128)) &&
+             (!('widthMeters' in data) || (data.widthMeters is number && data.widthMeters > 0 && data.widthMeters <= 50)) &&
+             (!('lengthMeters' in data) || (data.lengthMeters is number && data.lengthMeters > 0 && data.lengthMeters <= 50)) &&
+             (!('positionX' in data) || data.positionX is number) &&
+             (!('positionY' in data) || data.positionY is number) &&
+             (!('rotationDegrees' in data) || data.rotationDegrees is number) &&
+             (!('rowCount' in data) || (data.rowCount is int && data.rowCount >= 1 && data.rowCount <= 10)) &&
+             (!('slotsPerRow' in data) || (data.slotsPerRow is int && data.slotsPerRow >= 1 && data.slotsPerRow <= 20));
+    }
+
+    // Helper: Product validation
+    function isValidProduct(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.barcode is string && data.barcode.size() >= 1 && data.barcode.size() <= 64 &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 120 &&
+             data.brand is string && data.brand.size() >= 1 && data.brand.size() <= 100 &&
+             data.category is string && data.category.size() >= 1 && data.category.size() <= 80 &&
+             (!('netWeight' in data) || (data.netWeight is string && data.netWeight.size() <= 50)) &&
+             (!('mrp' in data) || (data.mrp is string && data.mrp.size() <= 50)) &&
+             (!('isVeg' in data) || data.isVeg is bool) &&
+             (!('isFssaiVerified' in data) || data.isFssaiVerified is bool) &&
+             (!('energyKcal' in data) || data.energyKcal is int) &&
+             (!('proteinG' in data) || data.proteinG is number) &&
+             (!('carbsG' in data) || data.carbsG is number) &&
+             (!('fatG' in data) || data.fatG is number) &&
+             (!('sodiumMg' in data) || data.sodiumMg is int) &&
+             (!('ingredients' in data) || (data.ingredients is string && data.ingredients.size() <= 500)) &&
+             (!('manufacturer' in data) || (data.manufacturer is string && data.manufacturer.size() <= 200)) &&
+             (!('shelfLife' in data) || (data.shelfLife is string && data.shelfLife.size() <= 100)) &&
+             (!('iconResName' in data) || (data.iconResName is string && data.iconResName.size() <= 100));
+    }
+
+    // Helper: ShelfItem validation
+    function isValidShelfItem(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.shelfId is string && data.shelfId.size() >= 1 && data.shelfId.size() <= 128 &&
+             data.productId is string && data.productId.size() >= 1 && data.productId.size() <= 128 &&
+             data.rowNumber is int && data.rowNumber >= 1 && data.rowNumber <= 10 &&
+             data.slotNumber is int && data.slotNumber >= 1 && data.slotNumber <= 20 &&
+             data.quantity is int && data.quantity >= 0 && data.quantity <= 10000 &&
+             (!('confidence' in data) || (data.confidence is number && data.confidence >= 0 && data.confidence <= 1)) &&
+             (!('lowStockThreshold' in data) || (data.lowStockThreshold is int && data.lowStockThreshold >= 0));
+    }
+
+    // Helper: CameraCalibration validation
+    function isValidCameraCalibration(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.shelfId is string && data.shelfId.size() >= 1 && data.shelfId.size() <= 128 &&
+             data.zoneLeft is number && data.zoneLeft >= 0 && data.zoneLeft <= 1 &&
+             data.zoneTop is number && data.zoneTop >= 0 && data.zoneTop <= 1 &&
+             data.zoneRight is number && data.zoneRight >= 0 && data.zoneRight <= 1 &&
+             data.zoneBottom is number && data.zoneBottom >= 0 && data.zoneBottom <= 1 &&
+             (!('dwellCutoffSeconds' in data) || (data.dwellCutoffSeconds is number && data.dwellCutoffSeconds >= 0)) &&
+             (!('exitGraceSeconds' in data) || (data.exitGraceSeconds is number && data.exitGraceSeconds >= 0)) &&
+             (!('isCalibrated' in data) || data.isCalibrated is bool);
+    }
+
+    // Helper: ObservationEvent validation
+    function isValidObservationEvent(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.shelfId is string && data.shelfId.size() >= 1 && data.shelfId.size() <= 128 &&
+             data.shelfNumber is int && data.shelfNumber >= 1 &&
+             data.eventType is string && data.eventType.size() >= 1 && data.eventType.size() <= 50 &&
+             (!('trackId' in data) || data.trackId is int) &&
+             (!('dwellSeconds' in data) || data.dwellSeconds is number) &&
+             (!('details' in data) || (data.details is string && data.details.size() <= 500));
+    }
+
+    // Scoped user space
+    match /users/{userId} {
+      // User must be authenticated and matching the path parameter
+      allow get: if isSignedIn() && request.auth.uid == userId;
+
+      // 1. Stores subcollection
+      match /stores/{storeId} {
+        allow get, list: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId &&
+                         isValidId(storeId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().id == storeId &&
+                         incoming().createdAt is timestamp && incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidStore(incoming());
+        allow update: if isSignedIn() && request.auth.uid == userId &&
+                         incoming().userId == existing().userId &&
+                         incoming().id == existing().id &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidStore(incoming()) &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['name', 'storeType', 'totalShelves', 'selectedFloorId', 'updatedAt']);
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
+
+      // 2. Shelves subcollection
+      match /shelves/{shelfId} {
+        allow get, list: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId &&
+                         isValidId(shelfId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().id == shelfId &&
+                         incoming().createdAt is timestamp && incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidShelf(incoming());
+        allow update: if isSignedIn() && request.auth.uid == userId &&
+                         incoming().userId == existing().userId &&
+                         incoming().id == existing().id &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidShelf(incoming()) &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['name', 'category', 'shape', 'widthMeters', 'lengthMeters', 'positionX', 'positionY', 'rotationDegrees', 'rowCount', 'slotsPerRow', 'storeId', 'floorId', 'shelfNumber', 'updatedAt']);
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
+
+      // 3. Products subcollection
+      match /products/{productId} {
+        allow get, list: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId &&
+                         isValidId(productId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().id == productId &&
+                         incoming().createdAt is timestamp && incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidProduct(incoming());
+        allow update: if isSignedIn() && request.auth.uid == userId &&
+                         incoming().userId == existing().userId &&
+                         incoming().id == existing().id &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidProduct(incoming()) &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['barcode', 'name', 'brand', 'category', 'netWeight', 'mrp', 'isVeg', 'isFssaiVerified', 'energyKcal', 'proteinG', 'carbsG', 'fatG', 'sodiumMg', 'ingredients', 'manufacturer', 'shelfLife', 'iconResName', 'updatedAt']);
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
+
+      // 4. ShelfItems subcollection
+      match /shelf_items/{itemId} {
+        allow get, list: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId &&
+                         isValidId(itemId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().id == itemId &&
+                         incoming().createdAt is timestamp && incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidShelfItem(incoming());
+        allow update: if isSignedIn() && request.auth.uid == userId &&
+                         incoming().userId == existing().userId &&
+                         incoming().id == existing().id &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidShelfItem(incoming()) &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['shelfId', 'productId', 'rowNumber', 'slotNumber', 'quantity', 'confidence', 'lowStockThreshold', 'updatedAt']);
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
+
+      // 5. CameraCalibrations subcollection
+      match /camera_calibrations/{calibrationId} {
+        allow get, list: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId &&
+                         isValidId(calibrationId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().id == calibrationId &&
+                         incoming().createdAt is timestamp && incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidCameraCalibration(incoming());
+        allow update: if isSignedIn() && request.auth.uid == userId &&
+                         incoming().userId == existing().userId &&
+                         incoming().id == existing().id &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp && incoming().updatedAt <= request.time &&
+                         isValidCameraCalibration(incoming()) &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['shelfId', 'zoneLeft', 'zoneTop', 'zoneRight', 'zoneBottom', 'dwellCutoffSeconds', 'exitGraceSeconds', 'isCalibrated', 'updatedAt']);
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
+
+      // 6. ObservationEvents subcollection (Append-only audit log)
+      match /observation_events/{eventId} {
+        allow get, list: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId &&
+                         isValidId(eventId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().id == eventId &&
+                         incoming().createdAt is timestamp && incoming().createdAt <= request.time &&
+                         isValidObservationEvent(incoming());
+        // Append-only: No updates or deletes allowed
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+  }
+}

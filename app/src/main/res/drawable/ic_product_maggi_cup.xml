@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- Cup Noodles Shape (Tapered Bucket) -->
+    <path
+        android:fillColor="#E51837"
+        android:pathData="M20,18 L76,18 C78,18 80,19 80,22 L72,82 C71,85 69,88 66,88 L30,88 C27,88 25,85 24,82 L16,22 C16,19 18,18 20,18 Z" />
+    <path
+        android:fillColor="#FFD100"
+        android:pathData="M22,22 L74,22 L68,64 L28,64 Z" />
+    <path
+        android:fillColor="#E51837"
+        android:pathData="M30,30 L66,30 L64,42 L32,42 Z" />
+    <!-- White text bar -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,34 L62,34 L62,38 L34,38 Z" />
+    <!-- Cup Rim -->
+    <path
+        android:fillColor="#B7094C"
+        android:pathData="M16,16 L80,16 L78,20 L18,20 Z" />
+</vector>

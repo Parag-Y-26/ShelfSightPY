@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- Masala-ae-Magic Yellow Sachet -->
+    <path
+        android:fillColor="#FFB703"
+        android:pathData="M18,16 L78,16 C81,16 83,18 83,21 L80,78 C80,81 78,83 75,83 L21,83 C18,83 16,81 16,78 L13,21 C13,18 15,16 18,16 Z" />
+    <path
+        android:fillColor="#E51837"
+        android:pathData="M24,22 L72,22 L70,36 L26,36 Z" />
+    <path
+        android:fillColor="#6A040F"
+        android:pathData="M22,46 L74,46 L72,74 L24,74 Z" />
+    <path
+        android:fillColor="#FFD166"
+        android:pathData="M48,52 L51,58 L57,59 L52,63 L54,69 L48,65 L42,69 L44,63 L39,59 L45,58 Z" />
+</vector>
